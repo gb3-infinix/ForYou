@@ -3,22 +3,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const spoilers = document.querySelectorAll(".spoiler");
   const spoilerTexts = document.querySelectorAll(".spoiler-text");
 
-  // Обробка кліку по фото (спойлер)
+  // Функція відкриття спойлера
+  const openSpoiler = (element) => {
+    element.classList.add("clicked");
+  };
+
+  // Обробка кліку та торкання по фото (спойлер)
   spoilers.forEach((spoiler) => {
-    spoiler.addEventListener("click", () => {
-      spoiler.classList.add("clicked");
+    ["click", "touchstart"].forEach((evt) => {
+      spoiler.addEventListener(evt, () => openSpoiler(spoiler));
     });
   });
 
-  // Обробка кліку по текстовому блоку
+  // Обробка кліку та торкання по текстовому блоку
   spoilerTexts.forEach((textBlock) => {
-    textBlock.addEventListener("click", () => {
-      textBlock.parentElement.classList.add("clicked");
+    ["click", "touchstart"].forEach((evt) => {
+      textBlock.addEventListener(evt, () =>
+        openSpoiler(textBlock.parentElement)
+      );
     });
   });
 
   // М'яка анімація появи блоків при скролі
-  const steps = document.querySelectorAll(".step");
+  const elementsToAnimate = document.querySelectorAll(".step, .image-container, .text-container");
   const options = {
     threshold: 0.1,
   };
@@ -26,14 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const fadeInObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
+        entry.target.classList.add("visible");
       }
     });
   }, options);
 
-  steps.forEach((step) => {
-    fadeInObserver.observe(step);
+  elementsToAnimate.forEach((el) => {
+    fadeInObserver.observe(el);
   });
 });
 

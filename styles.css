@@ -13,10 +13,11 @@
 /* Body Styles */
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 1.05rem;
   scroll-behavior: smooth;
 }
 
@@ -31,19 +32,21 @@ body {
 }
 
 .header h1 {
-  font-size: 2.2rem; /* було 2.6rem */
+  font-size: 2.2rem;
   margin: 10px 0;
   color: #b30059;
   animation: floatText 2s ease-in-out infinite alternate;
-  font-family: 'Segoe Script', cursive;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
 
 .header .subtitle {
-  font-size: 1.2rem; /* було 1.4rem */
+  font-size: 1.2rem;
   margin-top: 6px;
   color: #7a0055;
   font-style: italic;
   line-height: 1.4;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Animations */
@@ -75,7 +78,8 @@ body {
   color: var(--primary-color);
   margin-bottom: 20px;
   text-align: center;
-  font-family: 'Segoe Script', cursive;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
   padding-top: 30px;
   padding-bottom: 10px;
   border-bottom: 2px dashed var(--frame-color);
@@ -106,8 +110,8 @@ body {
 
 /* Image Container */
 .image-container {
-  width: 360px;            /* Раніше було 300px */
-  height: 300px;           /* Раніше було 400px */
+  width: 360px;
+  height: 300px;
   position: relative;
   overflow: hidden;
   border: 8px solid var(--frame-color);
@@ -151,8 +155,8 @@ body {
 
 /* Text Container */
 .text-container {
-  width: 360px;            /* Раніше було 300px */
-  height: 300px;           /* Раніше було 400px */
+  width: 360px;
+  height: 300px;
   background: white;
   border: 3px dashed var(--secondary-color);
   border-radius: 15px;
@@ -164,10 +168,17 @@ body {
   filter: var(--hover-blur);
   transition: filter 0.5s ease;
   text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .spoiler-text.clicked {
   filter: none;
+}
+
+.text-container p,
+.spoiler-text p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.1rem;
 }
 
 /* Footer Section */
@@ -184,10 +195,10 @@ body {
 .footer::before {
   content: "💖 💌 💕";
   position: absolute;
-  top: -14px; /* було -20px */
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.6rem; /* було 2rem */
+  font-size: 1.6rem;
   line-height: 1;
   background: #ffe0f0;
   padding: 0 6px;
@@ -196,8 +207,8 @@ body {
 }
 
 .footer p {
-  margin: 4px 0; /* було 8px — зменшуємо */
-  font-family: 'Segoe UI', sans-serif;
+  margin: 4px 0;
+  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.4;
 }
 
@@ -227,24 +238,6 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-  .step-content {
-    flex-direction: column;
-  }
-  .image-container,
-  .text-container {
-    width: 90%;
-    height: auto;
-  }
-  .header h1 {
-    font-size: 1.8rem;
-  }
-  .subtitle {
-    font-size: 1rem;
   }
 }
 
@@ -282,6 +275,7 @@ body {
   text-align: center;
   box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
   animation: fadeIn 1s ease;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .modal-box button {
@@ -323,3 +317,54 @@ body {
   transform: scale(1.15);
 }
 
+/* Ефект плавної появи при скролі */
+.step,
+.image-container,
+.text-container {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.step.visible,
+.image-container.visible,
+.text-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Мобільні покращення */
+@media screen and (max-width: 768px) {
+  .step-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .image-container,
+  .text-container {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+  }
+  .image-container img {
+    height: auto;
+    max-height: 300px;
+  }
+  .step-title {
+    font-size: 1.2rem;
+    padding-top: 15px;
+    padding-bottom: 5px;
+  }
+  .instructions {
+    padding: 20px 10px;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+  .music-player {
+    bottom: 60px;
+    right: 10px;
+  }
+}
