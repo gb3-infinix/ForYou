@@ -1,33 +1,10 @@
-// ==== Очікуємо завантаження DOM ====
 document.addEventListener("DOMContentLoaded", () => {
-  const spoilers = document.querySelectorAll(".spoiler");
-  const spoilerTexts = document.querySelectorAll(".spoiler-text");
-
-  // Функція відкриття спойлера з плавним ефектом
+  // === Функція автоматичного зняття блюру ===
   const openSpoiler = (element) => {
     element.classList.add("clicked");
-    element.style.transition = "filter 0.5s ease";
   };
 
-  // Події для фото (спойлер)
-  spoilers.forEach((spoiler) => {
-    ["click", "touchstart"].forEach((evt) => {
-      spoiler.addEventListener(evt, () => openSpoiler(spoiler), { passive: true });
-    });
-  });
-
-  // Події для текстових блоків
-  spoilerTexts.forEach((textBlock) => {
-    ["click", "touchstart"].forEach((evt) => {
-      textBlock.addEventListener(
-        evt,
-        () => openSpoiler(textBlock.parentElement),
-        { passive: true }
-      );
-    });
-  });
-
-  // ==== Анімація при скролі ====
+  // === Анімація при скролі ===
   const elementsToAnimate = document.querySelectorAll(".step, .image-container, .text-container");
 
   const fadeInObserver = new IntersectionObserver(
@@ -35,11 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("visible");
-          fadeInObserver.unobserve(entry.target); // розвантажуємо
+
+          // Знімаємо блюр з фото
+          if (entry.target.classList.contains("image-container")) {
+            const spoilerEl = entry.target.querySelector(".spoiler");
+            if (spoilerEl) openSpoiler(spoilerEl);
+          }
+
+          // Знімаємо блюр з тексту (рамки)
+          if (entry.target.classList.contains("text-container")) {
+            openSpoiler(entry.target);
+          }
+
+          fadeInObserver.unobserve(entry.target);
         }
       });
     },
-    { threshold: 0.15 }
+    { threshold: 0.2 }
   );
 
   elementsToAnimate.forEach((el) => fadeInObserver.observe(el));
@@ -47,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==== Модалка підтвердження ====
   const confirmButton = document.getElementById("confirm-button");
   const modalOverlay = document.getElementById("love-check");
+  const music = document.getElementById("bg-music");
+  const toggle = document.getElementById("music-toggle");
 
   if (confirmButton) {
     confirmButton.addEventListener("click", () => {
@@ -55,20 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         modalOverlay.style.display = "none";
       }, 400);
-      // Запускаємо музику автоматично після підтвердження
       if (music.paused) {
-        music.play().catch(() => {
-          console.warn("Автозапуск музики заблоковано браузером");
-        });
+        music.play().catch(() => {});
         toggle.textContent = "🔊";
       }
     });
   }
 
   // ==== Музика ====
-  const music = document.getElementById("bg-music");
-  const toggle = document.getElementById("music-toggle");
-
   if (toggle && music) {
     toggle.addEventListener("click", () => {
       if (music.paused) {
